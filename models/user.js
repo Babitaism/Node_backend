@@ -2,11 +2,12 @@ const connectionstr = require("../connection");
 const jwt = require("jsonwebtoken");
 require("crypto").randomBytes(64).toString("hex");
 const bcrypt = require("bcryptjs");
+
 // const jwt = require('jsonwebtoken')
 
 class UserModel {
   static async create(parameters) {
-    console.log('====syssa', this)
+  console.log('====syssa', parameters)
     let sql = `INSERT INTO UserDetails (email,password,firstname,lastname) VALUES ("${parameters.email}","${parameters.password}","${parameters.firstname}","${parameters.lastname}")`;
     try {
       let resp = await connectionstr(sql);

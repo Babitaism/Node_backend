@@ -17,7 +17,6 @@ app.use(cors({
   origin: process.env.FRONTENDORIGIN
 }))
 
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const TokenManager = require('./utility/tokenManager');
@@ -35,8 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.post("/signup", User.signup.bind(User) );
-app.post("/login", Authentication.login.bind(Authentication),TokenManager.tokenGenerator.bind(TokenManager));
+app.post("/login", Authentication.login.bind(Authentication));
+app.post("/getUserDetail", User.getUserDetail.bind(User) )
 
+app.use(cookieParser());
 
 app.use(function(req, res, next) {
   next(createError(404));
