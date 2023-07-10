@@ -25,21 +25,10 @@ class User {
     console.log(responsFromModel,"res")
   }
 
-  static async getUserDetail(userDetails, res) {
-    let token = userDetails.headers.token;
-    let decode = Authentication.tokenDecode(token, process.env.JWT_SECRET_KEY);
-    if (decode.status == 500) {
-      res.json(decode);
-    }
-
-
-    if (decode.status ==  200) {
-      let id = decode.message.userId;
-      console.log(decode, "deco.....");
-      let responseFromModel = await this.userNameDetails(id);
+  static async getUserDetail(req, res) {
+      let responseFromModel = await this.userNameDetails(req.currentUser.userId);
       res.json(responseFromModel);
-    }
-    //  var older_token = jwt.sign({ token:token, iat: Math.floor(Date.now() / 1000) - 30 },process.env.JWT_SECRET_KEY);
+    
   }
 
   static async userNameDetails(number) {
@@ -63,8 +52,6 @@ class User {
     let name = resp[0].FirstName + " " + resp[0].LastName;
     let userDetails = resp[0]
     if (resp.length == 1) {
-      console.log(name);
-      console.log(userDetails,"resp")
       return {
         message: "Authentication Sucessful",
         userName: name,
