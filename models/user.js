@@ -26,7 +26,6 @@ class UserModel {
 
   static createUserObj(data) {
     delete data[0].Password;
-    console.log(data,"data")
     return data[0];
   }
 }
