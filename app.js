@@ -23,6 +23,7 @@ app.use(
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const TokenManager = require("./utility/tokenManager");
+const SearchItems = require("./controllers/searchItems");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -33,31 +34,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 /**
- * 
+ *
  * MIDDLEWARE MAGIC HAPPENS HERE
  */
+
+// /getTshirtImage\/[0-9]+$/
+
 app.all("*", function (req, res, next) {
-  console.log('middle ware called')
-  if (loginNotRequired[req.path]) {
+  let str = "/getImage";
+  //TODO:: make it configurable change it one place and it should work in all place 
+  
+  if (loginNotRequired[req.path] || req.path.includes(str)) {
     next();
   } else {
     const authResp = Authentication.tokenDecode(
       req.headers["token"],
       process.env.JWT_SECRET_KEY
     );
+    console.log('-------error on backend---------------', authResp)
     if (authResp.status == 200) {
       req.currentUser = authResp.message;
       req.connectionstr = connectionstr;
       next();
     } else {
-      next(new Error(401));
+      res.json(authResp)
     }
   }
 });
 
 /**
  * MIDDLEWARE MAGIC ENDS HERE
- * 
+ *
  */
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
@@ -66,9 +73,12 @@ app.use("/", indexRouter);
 app.post("/signup", User.signup.bind(User));
 app.post("/login", Authentication.login.bind(Authentication));
 app.post("/getUserDetail", User.getUserDetail.bind(User));
-app.post('/products', Product.fetchAll.bind(Product))
-
+app.post("/products", Product.fetchAll.bind(Product));
+app.get("/getImage?", Product.sendImage.bind(Product));
+app.get("/searchItems" , SearchItems.searchBrand.bind(SearchItems))
+app.get('/fetchProductInfo', SearchItems.searchBrandImages.bind(SearchItems) )
 app.use(cookieParser());
+
 
 app.use(function (req, res, next) {
   next(createError(404));

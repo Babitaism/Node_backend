@@ -17,11 +17,19 @@ class Authentication {
   }
 
   static tokenDecode = (token, secretkey) => {
+    let status;
     try {
       let decoded = jwt.verify(token, secretkey);
       return { message: decoded, status: 200 }
     } catch (err) {
-      return { message: err.message, status: 500 }
+      if (err.message == 'jwt malformed' || err.message == 'invalid token'){
+        status = 401
+      }
+      else{
+        status = 500
+      }
+      console.log("=>>>>>>>>>>>", err)
+      return { message: err.message, status }
     }
   
   }
@@ -42,7 +50,7 @@ class Authentication {
       );
       userInfo = UserModel.createUserObj(resp);
       token = await TokenManager.tokenGenerator(userInfo);
-      console.log(token);
+      // console.log(token);
 
       if (resp.length == 1) {
         return {

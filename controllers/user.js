@@ -28,7 +28,6 @@ class User {
   static async getUserDetail(req, res) {
       let responseFromModel = await this.userNameDetails(req.currentUser.userId);
       res.json(responseFromModel);
-    
   }
 
   static async userNameDetails(number) {
