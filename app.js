@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const Authentication = require("./controllers/authentication");
 const Product = require("./controllers/product");
 const loginNotRequired = require("./loginNotRequired");
+
 app.use(
   cors({
     origin: process.env.FRONTENDORIGIN,
@@ -34,7 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 /**
- *
  * MIDDLEWARE MAGIC HAPPENS HERE
  */
 
@@ -75,8 +75,8 @@ app.post("/login", Authentication.login.bind(Authentication));
 app.post("/getUserDetail", User.getUserDetail.bind(User));
 app.post("/products", Product.fetchAll.bind(Product));
 app.get("/getImage?", Product.sendImage.bind(Product));
-app.get("/searchItems" , SearchItems.searchBrand.bind(SearchItems))
-app.get('/fetchProductInfo', SearchItems.searchBrandImages.bind(SearchItems) )
+app.get("/searchItems" , SearchItems.search.bind(SearchItems))
+app.get('/fetchProductInfo', SearchItems.searchImages.bind(SearchItems) )
 app.use(cookieParser());
 
 
