@@ -4,13 +4,11 @@ const path = require("path");
 class SearchItems {
   static async searchImages(req, res) {
     let responseFromModel = await this.fetchProducts(req);
-    // console.log(responseFromModel,"===========")
     res.json({ message: responseFromModel });
   }
 
   static async fetchProducts(name) {
     let sql;
-    console.log(name.query.item, "itemmmmmmmmmmmmmm");
     if (name.query.item) {
       sql = `with temp_view as (select pd.*, concat( ProductSpecification , ' ' , ProductName)  comb from ProductDetails pd)
       select * from temp_view where comb = '${name.query.item}' or ProductName = '${name.query.item}'`;
@@ -23,7 +21,6 @@ class SearchItems {
   }
 
   static async search(req, res) {
-    // console.log(req.query.item, "++++++++++++++");
     let refinedDataset = await this.getBrandDetails(req);
     let resp = await this.searchElement(refinedDataset, req.query.item);
     console.log(resp,"mmmm")
@@ -61,31 +58,6 @@ class SearchItems {
     }
     return finalArray;
   }
-
-  // static async rename(RowDataPacket) {
-  //   console.log(RowDataPacket, "pppp");
-  //   let blankarr = [];
-  //   let uniqueArr = [];
-  //   let uniqueObj = {};
-  //   let obj = {};
-  //   obj.title = RowDataPacket;
-  //   console.log(obj, "obj");
-  //   uniqueArr.push(obj);
-  //   for (let i in RowDataPacket) {
-  //     let obj = {};
-  //     obj.title = RowDataPacket[i].concatInfo;
-  //     blankarr.push(obj);
-  //     // console.log(blankarr,"l===============")
-  //   }
-  //   for (let i in blankarr) {
-  //     let values = blankarr[i].title;
-  //     uniqueObj[values] = blankarr[i];
-  //   }
-  //   for (let i in uniqueObj) {
-  //     uniqueArr.push(uniqueObj[i]);
-  //   }
-  //   return uniqueArr;
-  // }
 
   static async removeDuplicate(resp) {
     let obj = {};
