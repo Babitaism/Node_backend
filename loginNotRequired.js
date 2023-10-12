@@ -1,6 +1,7 @@
 const loginNotRequired =  {
     '/login': true,
-    "/market-place": true
+    "/market-place": true,
+    "/signup":true,
 }
 
 
@@ -8,5 +9,5 @@ const loginNotRequired =  {
 
 
 
- 
+
 module.exports = loginNotRequired

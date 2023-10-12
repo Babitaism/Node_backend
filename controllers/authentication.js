@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 require("crypto").randomBytes(64).toString("hex");
 const TokenManager = require("../utility/tokenManager");
-const { userInfo } = require("os");
+ const { userInfo } = require("os");
 dotenv.config();
 
 class Authentication {
@@ -16,12 +16,15 @@ class Authentication {
     res.json(responsFromModel);
   }
 
+
   static tokenDecode = (token, secretkey) => {
     let status;
     try {
       let decoded = jwt.verify(token, secretkey);
+      console.log(decoded.userId,"userid")
       return { message: decoded, status: 200 }
-    } catch (err) {
+    }
+     catch (err) {
       if (err.message == 'jwt malformed' || err.message == 'invalid token'){
         status = 401
       }
@@ -31,8 +34,9 @@ class Authentication {
       console.log("=>>>>>>>>>>>", err)
       return { message: err.message, status }
     }
-  
+
   }
+
 
   static async authenticate(parameters) {
     let user_email = parameters.email;
@@ -42,15 +46,13 @@ class Authentication {
     let token = {};
     if (user_email && user_password) {
       // TODO:: Bad practise improve it later
-      sql = `select * from UserDetails where email ="${user_email}" && password ="${user_password}"`;
+      sql = `select * from users where email ="${user_email}" && password ="${user_password}"`;
     }
     try {
-      let resp = await connectionstr(
-        `select * from UserDetails where email ="${user_email}" && password ="${user_password}"`
-      );
+      let resp = await connectionstr(sql);
+
       userInfo = UserModel.createUserObj(resp);
       token = await TokenManager.tokenGenerator(userInfo);
-      // console.log(token);
 
       if (resp.length == 1) {
         return {

@@ -42,8 +42,9 @@ app.use(cookieParser());
 
 app.all("*", function (req, res, next) {
   let str = "/getImage";
-  //TODO:: make it configurable change it one place and it should work in all place 
-  
+
+  ////TODO:: make it configurable change it one place and it should work in all place
+
   if (loginNotRequired[req.path] || req.path.includes(str)) {
     next();
   } else {
@@ -75,10 +76,18 @@ app.post("/login", Authentication.login.bind(Authentication));
 app.post("/getUserDetail", User.getUserDetail.bind(User));
 app.post("/products", Product.fetchAll.bind(Product));
 app.get("/getImage?", Product.sendImage.bind(Product));
-app.get("/searchItems" , SearchItems.search.bind(SearchItems))
-app.get('/fetchProductInfo', SearchItems.searchImages.bind(SearchItems) )
-app.use(cookieParser());
+app.get("/searchItems" , SearchItems.search.bind(SearchItems));
+app.get('/fetchProductInfo', SearchItems.searchImages.bind(SearchItems) );
+app.post('/user-details',User.getUserProfile.bind(User));
+app.post("/addUserDetails", User.addDetails.bind(User));
+app.post("/deleteDetails", User.deleteUserDetails.bind(User));
+app.post("/editDetails", User.editUserDetails.bind(User));
+app.post("/editAndAddUserDetails", User.editAndAddUserDetails.bind(User));
+app.post("/editAddressDetails", User.editAddress.bind(User));
+app.post("/fetchWishlist", User.fetchUser.bind(User));
+app.post("/getWishlistItems", User.fetchUserItems.bind(User));
 
+app.use(cookieParser());
 
 app.use(function (req, res, next) {
   next(createError(404));

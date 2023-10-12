@@ -13,9 +13,11 @@ class TokenManager {
       userId: userInfo.UserId,
     };
     const token = jwt.sign(data, jwtSecretKey);
-  
+
     return token
+  
   }
+
 }
 
 
