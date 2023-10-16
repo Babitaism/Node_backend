@@ -23,7 +23,7 @@ class SearchItems {
   static async search(req, res) {
     let refinedDataset = await this.getBrandDetails(req);
     let resp = await this.searchElement(refinedDataset, req.query.item);
-    console.log(resp,"mmmm")
+    // console.log(resp,"mmmm")
     res.json({ message: resp });
   }
 
